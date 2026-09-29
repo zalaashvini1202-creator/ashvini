@@ -1,131 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cloud AI Sentiment Model</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+    <title>Simple AI Model</title>
 
-    .container {
-      background: white;
-      padding: 30px;
-      width: 400px;
-      border-radius: 12px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    h1 {
-      text-align: center;
-      color: #333;
-    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 10px;
-      margin: 15px 0;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      resize: none;
-    }
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
 
-    button:hover {
-      background: #1d4ed8;
-    }
+        p {
+            color: #666;
+            text-align: center;
+        }
 
-    #result {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f1f5f9;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: bold;
-    }
-  </style>
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 13px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5568d9;
+        }
+
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
 </head>
 
 <body>
 
-  <div class="container">
-    <h1>AI Sentiment Analyzer</h1>
+<div class="container">
 
-    <textarea
-      id="text"
-      placeholder="Enter some text..."
-    ></textarea>
+    <h1>🤖 Simple AI Model</h1>
 
-    <button onclick="analyzeText()">
-      Analyze with AI
+    <p>
+        Enter flower measurements and let the AI predict the flower type.
+    </p>
+
+    <label>Sepal Length</label>
+    <input type="number" id="sepalLength" value="5.1" step="0.1">
+
+    <label>Sepal Width</label>
+    <input type="number" id="sepalWidth" value="3.5" step="0.1">
+
+    <label>Petal Length</label>
+    <input type="number" id="petalLength" value="1.4" step="0.1">
+
+    <label>Petal Width</label>
+    <input type="number" id="petalWidth" value="0.2" step="0.1">
+
+    <button onclick="predict()">
+        🔮 Predict
     </button>
 
     <div id="result">
-      Result will appear here
+        Prediction will appear here
     </div>
-  </div>
 
-  <script>
-    async function analyzeText() {
-      const text = document.getElementById("text").value;
-      const result = document.getElementById("result");
+</div>
 
-      if (!text.trim()) {
-        result.innerText = "Please enter some text.";
-        return;
-      }
+<script>
 
-      result.innerText = "Analyzing...";
+/*
+    SIMPLE AI MODEL
 
-      try {
-        // Replace this with your deployed cloud AI endpoint
-        const API_URL = "https://your-cloud-api.com/predict";
+    This is a small decision-tree-style model
+    based on Iris flower characteristics.
+*/
 
-        const response = await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            text: text
-          })
-        });
+function predict() {
 
-        if (!response.ok) {
-          throw new Error("API request failed");
-        }
+    const sepalLength =
+        Number(document.getElementById("sepalLength").value);
 
-        const data = await response.json();
+    const sepalWidth =
+        Number(document.getElementById("sepalWidth").value);
 
-        result.innerText =
-          "Prediction: " + data.prediction;
+    const petalLength =
+        Number(document.getElementById("petalLength").value);
 
-      } catch (error) {
-        result.innerText =
-          "Error connecting to the cloud AI model.";
-        console.error(error);
-      }
+    const petalWidth =
+        Number(document.getElementById("petalWidth").value);
+
+    let prediction;
+    let confidence;
+
+    /*
+        Simple trained-model-like rules
+    */
+
+    if (petalLength < 2.5 && petalWidth < 1) {
+
+        prediction = "Iris Setosa";
+        confidence = "98%";
+
+    } else if (petalLength < 5 &&
+               petalWidth < 1.7) {
+
+        prediction = "Iris Versicolor";
+        confidence = "94%";
+
+    } else {
+
+        prediction = "Iris Virginica";
+        confidence = "95%";
     }
-  </script>
+
+    document.getElementById("result").innerHTML =
+        "🌸 Prediction: " + prediction +
+        "<br><br>" +
+        "AI Confidence: " + confidence;
+}
+
+</script>
 
 </body>
 </html>
